@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <img src="https://media.giphy.com/media/mRExr9tHkzPdlfuBtx/giphy.gif" width="480" alt="Ronaldo Real Madrid knee-slide celebration" />
+  <img src="https://media.tenor.com/YP4KrHlwtsYAAAAd/cristiano-ronaldo-manchester-united-cristiano-ronaldo-celebration.gif" width="480" alt="Young Cristiano Ronaldo, Manchester United celebration" />
 </p>
 
 <p align="center">
