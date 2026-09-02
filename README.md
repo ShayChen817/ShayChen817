@@ -3,11 +3,11 @@
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=700&size=26&duration=2600&pause=900&color=E4002B&background=00000000&center=true&vCenter=true&width=600&lines=SIUUUUUUU!;%F0%9F%90%90+GOAT+committing+code;7x+Ballon+d%27Or.+0x+merge+conflicts%3F;Wearing+%237+in+every+repo+%E2%9A%BD" alt="typing banner" />
+  <img src="https://readme-typing-svg.demolab.com/?font=Fira+Code&weight=700&size=26&duration=2600&pause=900&color=E4002B&background=00000000&center=true&vCenter=true&width=600&lines=SIUUUUUUU!;%F0%9F%90%90+GOAT+committing+code;3x+consecutive+Champions+League.+0x+merge+conflicts%3F;Wearing+%237+in+every+repo+%E2%9A%BD" alt="typing banner" />
 </p>
 
 <p align="center">
-  <img src="https://media.giphy.com/media/yNyH86Nxg9HtikgIej/giphy.gif" width="420" alt="CR7 siuuu celebration" />
+  <img src="https://media.tenor.com/9Ye_GEzkc5cAAAAM/cristiano-ronaldo-real-madrid.gif" width="420" alt="Ronaldo Real Madrid celebration" />
 </p>
 
 <p align="center">
