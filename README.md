@@ -9,11 +9,11 @@
 <p>Every commit counts. Every merge moves things forward.</p>
 
 <p align="center">
-  <img src="assets/activity-4d3f8c8c3ac3.svg" width="100%" alt="Public and private commits, pull requests opened, and pull requests merged over the past 365 days" />
+  <img src="assets/activity-b6c51758a4bc.svg" width="100%" alt="Public and private commits, pull requests opened, and pull requests merged across all time" />
 </p>
 
 <!-- ACTIVITY:START -->
-<sub>Public + private · past 365 days · updated 2026-10-16 UTC · counts only.</sub>
+<sub>Public + private · all time · updated 2026-10-16 UTC · counts only.</sub>
 <br /><sub>GitHub-indexed activity visible to the authorized account. Repository names and activity details are never published.</sub>
 <!-- ACTIVITY:END -->
 

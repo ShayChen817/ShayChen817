@@ -1,5 +1,5 @@
 """Publish aggregate counts only; never persist repository or activity details."""
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from pathlib import Path
 import json
 import hashlib
@@ -27,13 +27,12 @@ def search_count(kind, query):
 
 
 def render(now):
-    since = (now - timedelta(days=365)).date().isoformat()
     # Prevent a public-only or expired authorization from replacing combined counts.
     if search_count("issues", f"author:{USER} is:pr is:private") == 0:
         raise RuntimeError("Private PR access could not be verified; retaining previous counts")
-    commits = search_count("commits", f"author:{USER} author-date:>={since}")
-    prs = search_count("issues", f"author:{USER} is:pr created:>={since}")
-    merged = search_count("issues", f"author:{USER} is:pr is:merged merged:>={since}")
+    commits = search_count("commits", f"author:{USER}")
+    prs = search_count("issues", f"author:{USER} is:pr")
+    merged = search_count("issues", f"author:{USER} is:pr is:merged")
     cards = []
     for i, (name, count, accent) in enumerate([
         ("COMMITS", commits, "#ffffff"),
@@ -46,9 +45,9 @@ def render(now):
                      f'<text x="{x+24}" y="104" fill="{accent}" font-size="54" font-weight="700">{count:,}</text>'
                      f'<text x="{x+24}" y="143" fill="#bcbcc9" font-size="13" letter-spacing="1.5">{name}</text>')
     svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="195" viewBox="0 0 1200 195" role="img">'
-           '<title>Public and private GitHub activity over the past 365 days</title>'
+           '<title>Public and private GitHub activity across all time</title>'
            '<g font-family="Arial,Helvetica,sans-serif">' + ''.join(cards) + '</g></svg>\n')
-    rows = [f'<sub>Public + private · past 365 days · updated {now:%Y-%m-%d} UTC · counts only.</sub>',
+    rows = [f'<sub>Public + private · all time · updated {now:%Y-%m-%d} UTC · counts only.</sub>',
             '<br /><sub>GitHub-indexed activity visible to the authorized account. Repository names and activity details are never published.</sub>']
     readme_path = ROOT / "README.md"
     readme = readme_path.read_text(encoding="utf-8")
