@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import json
+import hashlib
 import re
 import subprocess
 
@@ -55,6 +56,14 @@ def render(now):
     if len(re.findall(pattern, readme, flags=re.S)) != 1:
         raise RuntimeError("Expected exactly one activity block")
     updated = re.sub(pattern, lambda _: "<!-- ACTIVITY:START -->\n" + "\n".join(rows) + "\n<!-- ACTIVITY:END -->", readme, flags=re.S)
+    # A content-addressed URL prevents stale GitHub image caches after a refresh.
+    version = hashlib.sha256(svg.encode("utf-8")).hexdigest()[:12]
+    updated, image_count = re.subn(
+        r'src="assets/activity\.svg(?:\?v=[a-f0-9]+)?"',
+        f'src="assets/activity.svg?v={version}"', updated,
+    )
+    if image_count != 1:
+        raise RuntimeError("Expected exactly one activity image")
     (ROOT / "assets/activity.svg").write_text(svg, encoding="utf-8")
     readme_path.write_text(updated, encoding="utf-8")
 

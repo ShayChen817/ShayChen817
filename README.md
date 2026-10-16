@@ -9,7 +9,7 @@
 <p>Every commit counts. Every merge moves things forward.</p>
 
 <p align="center">
-  <img src="assets/activity.svg" width="100%" alt="Public and private commits, pull requests opened, and pull requests merged over the past 365 days" />
+  <img src="assets/activity.svg?v=15d9f43a0b3b" width="100%" alt="Public and private commits, pull requests opened, and pull requests merged over the past 365 days" />
 </p>
 
 <!-- ACTIVITY:START -->
