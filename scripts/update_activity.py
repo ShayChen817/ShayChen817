@@ -10,6 +10,46 @@ ROOT = Path(__file__).resolve().parents[1]
 USER = "ShayChen817"
 
 
+def contribution_total(now):
+    """Sum disjoint calendar years, including GitHub's restricted contributions.
+
+    Calendar totals already include reviews and private contribution counts.
+    Never add restrictedContributionsCount or the PR/commit cards a second time.
+    """
+    result = subprocess.run(
+        ["gh", "api", f"users/{USER}", "--jq", ".created_at"],
+        check=True, capture_output=True, encoding="utf-8",
+    )
+    created = datetime.fromisoformat(result.stdout.strip().replace("Z", "+00:00"))
+    now = now.astimezone(timezone.utc)
+    query = """query($login: String!, $from: DateTime!, $to: DateTime!) {
+      user(login: $login) {
+        contributionsCollection(from: $from, to: $to) {
+          contributionCalendar { totalContributions }
+        }
+      }
+    }"""
+    total = 0
+    for year in range(created.year, now.year + 1):
+        start = datetime(year, 1, 1, tzinfo=timezone.utc)
+        # Match GitHub's calendar-year selector, including today in the user's timezone.
+        end = datetime(year, 12, 31, 23, 59, 59, tzinfo=timezone.utc)
+        result = subprocess.run(
+            ["gh", "api", "graphql", "-f", f"query={query}",
+             "-f", f"login={USER}", "-f", f"from={start.isoformat()}",
+             "-f", f"to={end.isoformat()}"],
+            check=True, capture_output=True, encoding="utf-8",
+        )
+        data = json.loads(result.stdout)
+        if data.get("errors"):
+            raise RuntimeError("Contribution query failed; retaining previous counts")
+        count = data["data"]["user"]["contributionsCollection"]["contributionCalendar"]["totalContributions"]
+        if not isinstance(count, int) or isinstance(count, bool) or count < 0:
+            raise ValueError("Invalid contribution count")
+        total += count
+    return total
+
+
 def search_count(kind, query):
     result = subprocess.run(
         ["gh", "api", "--method", "GET", f"search/{kind}",
@@ -30,17 +70,19 @@ def render(now):
     # Prevent a public-only or expired authorization from replacing combined counts.
     if search_count("issues", f"author:{USER} is:pr is:private") == 0:
         raise RuntimeError("Private PR access could not be verified; retaining previous counts")
+    contributions = contribution_total(now)
     commits = search_count("commits", f"author:{USER}")
     prs = search_count("issues", f"author:{USER} is:pr")
     merged = search_count("issues", f"author:{USER} is:pr is:merged")
     cards = []
     for i, (name, count, accent) in enumerate([
+        ("CONTRIBUTIONS", contributions, "#ffcc66"),
         ("COMMITS", commits, "#ffffff"),
-        ("PULL REQUESTS OPENED", prs, "#ff5270"),
-        ("PULL REQUESTS MERGED", merged, "#ffcc66"),
+        ("PRS OPENED", prs, "#ff5270"),
+        ("PRS MERGED", merged, "#c4b5fd"),
     ]):
-        x = 16 + i * 394
-        cards.append(f'<rect x="{x}" y="12" width="380" height="166" rx="16" fill="#15151b" stroke="#303039"/>'
+        x = 12 + i * 298
+        cards.append(f'<rect x="{x}" y="12" width="282" height="166" rx="16" fill="#15151b" stroke="#303039"/>'
                      f'<rect x="{x+24}" y="36" width="26" height="3" rx="1.5" fill="{accent}"/>'
                      f'<text x="{x+24}" y="104" fill="{accent}" font-size="54" font-weight="700">{count:,}</text>'
                      f'<text x="{x+24}" y="143" fill="#bcbcc9" font-size="13" letter-spacing="1.5">{name}</text>')
@@ -48,7 +90,8 @@ def render(now):
            '<title>Public and private GitHub activity across all time</title>'
            '<g font-family="Arial,Helvetica,sans-serif">' + ''.join(cards) + '</g></svg>\n')
     rows = [f'<sub>Public + private · all time · updated {now:%Y-%m-%d} UTC · counts only.</sub>',
-            '<br /><sub>GitHub-indexed activity visible to the authorized account. Repository names and activity details are never published.</sub>']
+            '<br /><sub>Contributions follow GitHub’s calendar rules, including eligible code reviews and private activity. Commit and PR counts use GitHub search; the cards are not additive.</sub>',
+            '<br /><sub>Only aggregate counts visible to the authorized account are published.</sub>']
     readme_path = ROOT / "README.md"
     readme = readme_path.read_text(encoding="utf-8")
     pattern = r"<!-- ACTIVITY:START -->.*?<!-- ACTIVITY:END -->"
