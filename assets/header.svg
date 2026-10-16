@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">Shay Chen — SIUUUUU!</title>
+  <desc id="desc">Red and black football-inspired banner with a number seven and pitch markings.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#0d0d10"/><stop offset="1" stop-color="#251017"/></linearGradient>
+    <linearGradient id="red"><stop stop-color="#e4002b"/><stop offset="1" stop-color="#ff3658"/></linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#ffffff" stroke-opacity=".035"/></pattern>
+  </defs>
+  <rect width="1200" height="360" rx="24" fill="url(#bg)"/>
+  <rect width="1200" height="360" rx="24" fill="url(#grid)"/>
+  <path d="M900 0h300v360H735Z" fill="url(#red)"/>
+  <g fill="none" stroke="#ffffff" stroke-opacity=".14" stroke-width="2"><rect x="830" y="38" width="328" height="284" rx="3"/><path d="M994 38v284M830 110h48v140h-48M1158 110h-48v140h48"/><circle cx="994" cy="180" r="58"/></g>
+  <text x="976" y="291" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-style="italic" font-size="300" text-anchor="middle" opacity=".94">7</text>
+  <rect x="54" y="55" width="36" height="4" rx="2" fill="#ffcc66"/>
+  <text x="105" y="62" fill="#c6c2ca" font-family="monospace" font-size="14" letter-spacing="4">CODE. COMMIT. REPEAT.</text>
+  <text x="50" y="153" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-weight="800" font-size="72" letter-spacing="-3">SHAY CHEN</text>
+  <text x="54" y="198" fill="#c6c2ca" font-family="Arial,Helvetica,sans-serif" font-size="21">Electronics Engineering / KNOQS / Leuven</text>
+  <text x="54" y="286" fill="#ffcc66" font-family="Arial,Helvetica,sans-serif" font-weight="800" font-size="39" letter-spacing="5">SIUUUUU!</text>
+  <path d="M54 316h620" stroke="#ffffff" stroke-opacity=".14"/>
+</svg>
