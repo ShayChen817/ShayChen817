@@ -59,12 +59,17 @@ def render(now):
     # A content-addressed URL prevents stale GitHub image caches after a refresh.
     version = hashlib.sha256(svg.encode("utf-8")).hexdigest()[:12]
     updated, image_count = re.subn(
-        r'src="assets/activity\.svg(?:\?v=[a-f0-9]+)?"',
-        f'src="assets/activity.svg?v={version}"', updated,
+        r'src="assets/activity(?:-[a-f0-9]{12})?\.svg(?:\?v=[a-f0-9]+)?"',
+        f'src="assets/activity-{version}.svg"', updated,
     )
     if image_count != 1:
         raise RuntimeError("Expected exactly one activity image")
     (ROOT / "assets/activity.svg").write_text(svg, encoding="utf-8")
+    image_path = ROOT / "assets" / f"activity-{version}.svg"
+    image_path.write_text(svg, encoding="utf-8")
+    for old_image in (ROOT / "assets").glob("activity-*.svg"):
+        if re.fullmatch(r"activity-[a-f0-9]{12}\.svg", old_image.name) and old_image != image_path:
+            old_image.unlink()
     readme_path.write_text(updated, encoding="utf-8")
 
 
