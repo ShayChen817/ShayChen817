@@ -1,4 +1,4 @@
-name: Refresh public activity
+name: Refresh activity counts
 
 on:
   schedule:
@@ -26,16 +26,28 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Generate activity card and feeds
+      - name: Check statistics access
+        id: access
         env:
-          GH_TOKEN: ${{ github.token }}
+          STATS_TOKEN: ${{ secrets.PROFILE_STATS_TOKEN }}
+        run: |
+          if [ -n "$STATS_TOKEN" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::PROFILE_STATS_TOKEN is not configured. Retaining the existing combined counts."
+          fi
+      - name: Generate aggregate counts
+        if: steps.access.outputs.available == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.PROFILE_STATS_TOKEN }}
         run: python scripts/update_activity.py
       - name: Commit refreshed activity
+        if: steps.access.outputs.available == 'true'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add README.md assets/activity.svg
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m 'chore: refresh public GitHub activity'
+          git commit -m 'chore: refresh aggregate GitHub counts'
           git pull --rebase origin main
           git push origin HEAD:main
