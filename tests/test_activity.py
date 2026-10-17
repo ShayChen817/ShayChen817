@@ -75,7 +75,7 @@ class ContributionTests(unittest.TestCase):
                     numbers = [node.text for node in svg.iter() if node.attrib.get("font-weight") == "700"]
                     self.assertEqual(numbers, [str(total), "680", "115", "111"])
                 for old_path in old_paths:
-                    self.assertFalse(old_path.exists())
+                    self.assertTrue(old_path.exists())
                 old_paths = paths[:2]
 
     def test_history_has_disjoint_years_and_no_private_double_count(self):

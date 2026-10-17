@@ -183,12 +183,7 @@ def render(now):
     mobile_path.write_text(mobile_svg, encoding="utf-8")
     streak_path = ROOT / "assets" / f"streak-{streak_version}.svg"
     streak_path.write_text(streak_svg, encoding="utf-8")
-    for old_streak in (ROOT / "assets").glob("streak-*.svg"):
-        if re.fullmatch(r"streak-[a-f0-9]{12}\.svg", old_streak.name) and old_streak != streak_path:
-            old_streak.unlink()
-    for old_image in (ROOT / "assets").glob("activity-*.svg"):
-        if re.fullmatch(r"activity-(?:mobile-)?[a-f0-9]{12}\.svg", old_image.name) and old_image not in (image_path, mobile_path):
-            old_image.unlink()
+    # Keep versioned images so cached README pages and resized picture elements stay valid.
     readme_path.write_text(updated, encoding="utf-8")
 
 
