@@ -2,6 +2,9 @@
 from datetime import datetime, timezone
 import importlib.util
 import json
+import re
+import tempfile
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
@@ -24,6 +27,32 @@ def calendar_response(total, restricted):
 
 
 class ContributionTests(unittest.TestCase):
+    def test_refresh_updates_both_responsive_images_with_identical_counts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "assets").mkdir()
+            readme = root / "README.md"
+            readme.write_text('<picture><source media="(max-width: 600px)" '
+                              'srcset="assets/activity-mobile.svg" />'
+                              '<img src="assets/activity.svg" /></picture>'
+                              '<!-- ACTIVITY:START --><!-- ACTIVITY:END -->', encoding="utf-8")
+            old_paths = []
+            for total in (953, 954):
+                with patch.object(activity, "ROOT", root), patch.object(
+                    activity, "contribution_total", return_value=total
+                ), patch.object(activity, "search_count", side_effect=[1, 680, 115, 111]):
+                    activity.render(datetime(2026, 10, 18, tzinfo=timezone.utc))
+                paths = [root / path for path in re.findall(
+                    r'(?:src|srcset)="([^"]+)"', readme.read_text(encoding="utf-8"))]
+                for path, viewbox in zip(paths, ("0 0 600 800", "0 0 1200 404")):
+                    svg = ET.parse(path).getroot()
+                    self.assertEqual(svg.attrib["viewBox"], viewbox)
+                    numbers = [node.text for node in svg.iter() if node.attrib.get("font-weight") == "700"]
+                    self.assertEqual(numbers, [str(total), "680", "115", "111"])
+                for old_path in old_paths:
+                    self.assertFalse(old_path.exists())
+                old_paths = paths
+
     def test_history_has_disjoint_years_and_no_private_double_count(self):
         responses = [
             SimpleNamespace(stdout="2024-11-07T13:09:39Z"),

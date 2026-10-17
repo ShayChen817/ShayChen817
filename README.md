@@ -8,7 +8,10 @@
 <p align="center">Every commit counts. Every merge moves things forward.</p>
 
 <p align="center">
-  <img src="assets/activity-2222b395dd3e.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
+  <picture>
+    <source media="(max-width: 600px)" srcset="assets/activity-mobile-7a1a9755b078.svg" />
+    <img src="assets/activity-7a1a9755b078.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
+  </picture>
 </p>
 
 <!-- ACTIVITY:START -->

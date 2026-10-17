@@ -66,6 +66,25 @@ def search_count(kind, query):
     return count
 
 
+def activity_svg(metrics, mobile=False):
+    cards = []
+    for i, (name, count, accent) in enumerate(metrics):
+        x, y = (12, 12 + i * 198) if mobile else (12 + (i % 2) * 600, 12 + (i // 2) * 198)
+        fill = "#21181b" if i == 0 else "#15151b"
+        border = "#695036" if i == 0 else "#303039"
+        label_size = 26 if mobile else 17
+        number_size = 78 if mobile else 68
+        cards.append(f'<rect x="{x}" y="{y}" width="576" height="182" rx="20" fill="{fill}" stroke="{border}"/>'
+                     f'<rect x="{x+28}" y="{y+30}" width="4" height="22" rx="2" fill="{accent}"/>'
+                     f'<text x="{x+46}" y="{y+49}" fill="#dedbe3" font-size="{label_size}" letter-spacing="1">{name}</text>'
+                     f'<text x="{x+28}" y="{y+136}" fill="{accent}" font-size="{number_size}" font-weight="700">{count:,}</text>'
+                     f'<path d="M{x+28} {y+157}h520" stroke="{border}"/>')
+    width, height = (600, 800) if mobile else (1200, 404)
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">'
+            '<title>Public and private GitHub activity across all time</title>'
+            '<g font-family="Arial,Helvetica,sans-serif">' + ''.join(cards) + '</g></svg>\n')
+
+
 def render(now):
     # Prevent a public-only or expired authorization from replacing combined counts.
     if search_count("issues", f"author:{USER} is:pr is:private") == 0:
@@ -74,24 +93,14 @@ def render(now):
     commits = search_count("commits", f"author:{USER}")
     prs = search_count("issues", f"author:{USER} is:pr")
     merged = search_count("issues", f"author:{USER} is:pr is:merged")
-    cards = []
-    for i, (name, count, accent) in enumerate([
+    metrics = [
         ("CONTRIBUTIONS", contributions, "#ffcc66"),
         ("COMMITS", commits, "#ffffff"),
         ("PULL REQUESTS OPENED", prs, "#ff5270"),
         ("PULL REQUESTS MERGED", merged, "#ff8a9d"),
-    ]):
-        x, y = 12 + (i % 2) * 600, 12 + (i // 2) * 198
-        fill = "#21181b" if i == 0 else "#15151b"
-        border = "#695036" if i == 0 else "#303039"
-        cards.append(f'<rect x="{x}" y="{y}" width="576" height="182" rx="20" fill="{fill}" stroke="{border}"/>'
-                     f'<rect x="{x+28}" y="{y+30}" width="4" height="22" rx="2" fill="{accent}"/>'
-                     f'<text x="{x+46}" y="{y+47}" fill="#c8c5cd" font-size="17" letter-spacing="1.5">{name}</text>'
-                     f'<text x="{x+28}" y="{y+133}" fill="{accent}" font-size="68" font-weight="700">{count:,}</text>'
-                     f'<path d="M{x+28} {y+157}h520" stroke="{border}"/>')
-    svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="404" viewBox="0 0 1200 404" role="img">'
-           '<title>Public and private GitHub activity across all time</title>'
-           '<g font-family="Arial,Helvetica,sans-serif">' + ''.join(cards) + '</g></svg>\n')
+    ]
+    svg = activity_svg(metrics)
+    mobile_svg = activity_svg(metrics, mobile=True)
     rows = [f'<p align="center"><sub>Public + private &nbsp; · &nbsp; All time &nbsp; · &nbsp; Updated {now:%Y-%m-%d} UTC</sub></p>',
             '', '<details>', '<summary>About these numbers</summary>', '',
             'Contributions follow GitHub’s calendar rules, including eligible code reviews and private activity. Commit and PR counts use GitHub search; the cards are not additive.', '',
@@ -103,18 +112,26 @@ def render(now):
         raise RuntimeError("Expected exactly one activity block")
     updated = re.sub(pattern, lambda _: "<!-- ACTIVITY:START -->\n" + "\n".join(rows) + "\n<!-- ACTIVITY:END -->", readme, flags=re.S)
     # A content-addressed URL prevents stale GitHub image caches after a refresh.
-    version = hashlib.sha256(svg.encode("utf-8")).hexdigest()[:12]
+    version = hashlib.sha256((svg + mobile_svg).encode("utf-8")).hexdigest()[:12]
     updated, image_count = re.subn(
         r'src="assets/activity(?:-[a-f0-9]{12})?\.svg(?:\?v=[a-f0-9]+)?"',
         f'src="assets/activity-{version}.svg"', updated,
     )
     if image_count != 1:
         raise RuntimeError("Expected exactly one activity image")
+    updated, source_count = re.subn(
+        r'srcset="assets/activity-mobile(?:-[a-f0-9]{12})?\.svg"',
+        f'srcset="assets/activity-mobile-{version}.svg"', updated,
+    )
+    if source_count != 1:
+        raise RuntimeError("Expected exactly one mobile activity source")
     (ROOT / "assets/activity.svg").write_text(svg, encoding="utf-8")
     image_path = ROOT / "assets" / f"activity-{version}.svg"
     image_path.write_text(svg, encoding="utf-8")
+    mobile_path = ROOT / "assets" / f"activity-mobile-{version}.svg"
+    mobile_path.write_text(mobile_svg, encoding="utf-8")
     for old_image in (ROOT / "assets").glob("activity-*.svg"):
-        if re.fullmatch(r"activity-[a-f0-9]{12}\.svg", old_image.name) and old_image != image_path:
+        if re.fullmatch(r"activity-(?:mobile-)?[a-f0-9]{12}\.svg", old_image.name) and old_image not in (image_path, mobile_path):
             old_image.unlink()
     readme_path.write_text(updated, encoding="utf-8")
 
