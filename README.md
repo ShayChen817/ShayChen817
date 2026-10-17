@@ -9,8 +9,8 @@
 
 <p align="center">
   <picture>
-    <source media="(max-width: 600px)" srcset="assets/activity-mobile-7a1a9755b078.svg" />
-    <img src="assets/activity-7a1a9755b078.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
+    <source media="(max-width: 600px)" srcset="assets/activity-mobile-8601cded4f73.svg" />
+    <img src="assets/activity-8601cded4f73.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
   </picture>
 </p>
 
