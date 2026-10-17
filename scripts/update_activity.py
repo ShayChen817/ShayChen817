@@ -71,15 +71,17 @@ def activity_svg(metrics, mobile=False):
         parts.extend(f'<path d="M24 {y}H576" stroke="#30363d"/>' for y in (120, 240, 360))
     else:
         parts.append('<path d="M600 24V296 M24 160H1176" stroke="#30363d"/>')
+    colors = ("#eac16a", "#79b8ff", "#7bc99a", "#bda0ef")
     for i, (name, count) in enumerate(metrics):
+        accent = colors[i]
         if mobile:
             y = i * 120
             parts.append(f'<text x="28" y="{y+71}" fill="#a6adb6" font-size="32">{name}</text>')
-            parts.append(f'<text x="572" y="{y+77}" text-anchor="end" fill="#f0f3f6" font-size="52" font-weight="700">{count:,}</text>')
+            parts.append(f'<text x="572" y="{y+77}" text-anchor="end" fill="{accent}" font-size="52" font-weight="700">{count:,}</text>')
         else:
             x, y = (i % 2) * 600, (i // 2) * 160
             parts.append(f'<text x="{x+36}" y="{y+49}" fill="#a6adb6" font-size="24">{name}</text>')
-            parts.append(f'<text x="{x+36}" y="{y+119}" fill="#f0f3f6" font-size="56" font-weight="700">{count:,}</text>')
+            parts.append(f'<text x="{x+36}" y="{y+119}" fill="{accent}" font-size="56" font-weight="700">{count:,}</text>')
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">'
             '<title>Public and private GitHub activity across all time</title>'
             '<g font-family="Arial,Helvetica,sans-serif">' + ''.join(parts) + '</g></svg>\n')
