@@ -9,8 +9,8 @@
 
 <p align="center">
   <picture>
-    <source media="(max-width: 600px)" srcset="assets/activity-mobile-1cbdbe078dce.svg" />
-    <img src="assets/activity-1cbdbe078dce.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
+    <source media="(max-width: 600px)" srcset="assets/activity-mobile-35941866cde0.svg" />
+    <img src="assets/activity-35941866cde0.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
   </picture>
 </p>
 
@@ -24,18 +24,12 @@ Contributions follow GitHub’s calendar rules, including eligible code reviews 
 
 Only aggregate counts visible to the authorized account are published.
 
-The commit streak counts consecutive author-date days in Asia/Shanghai. If there is no commit today yet, a streak ending yesterday stays active. PRs and reviews do not extend it.
-
 </details>
 <!-- ACTIVITY:END -->
 
 <br />
 
-<h2 align="center">Keep the streak moving</h2>
-
-<p align="center">
-  <img src="assets/streak-d837b556f35c.svg" width="600" alt="Current consecutive commit days across public and private repositories" />
-</p>
+<h2 align="center">Contribution history</h2>
 
 <p align="center">
   <picture>
