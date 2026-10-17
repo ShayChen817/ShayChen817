@@ -9,8 +9,8 @@
 
 <p align="center">
   <picture>
-    <source media="(max-width: 600px)" srcset="assets/activity-mobile-02170a499e4b.svg" />
-    <img src="assets/activity-02170a499e4b.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
+    <source media="(max-width: 600px)" srcset="assets/activity-mobile-fec0cf5caaea.svg" />
+    <img src="assets/activity-fec0cf5caaea.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
   </picture>
 </p>
 
@@ -34,7 +34,7 @@ The commit streak counts consecutive author-date days in Asia/Shanghai. If there
 <h2 align="center">Keep the streak moving</h2>
 
 <p align="center">
-  <img src="assets/streak-fadf10bf0b08.svg" width="600" alt="Current consecutive commit days across public and private repositories" />
+  <img src="assets/streak-d837b556f35c.svg" width="600" alt="Current consecutive commit days across public and private repositories" />
 </p>
 
 <p align="center">

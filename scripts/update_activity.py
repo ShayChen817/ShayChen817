@@ -103,8 +103,8 @@ def activity_svg(metrics, mobile=False):
         x, y = (12, 12 + i * 198) if mobile else (12 + (i % 2) * 600, 12 + (i // 2) * 198)
         fill = "#21181b" if i == 0 else "#15151b"
         border = "#695036" if i == 0 else "#303039"
-        label_size = 26 if mobile else 17
-        number_size = 78 if mobile else 68
+        label_size = 36 if mobile else 17
+        number_size = 84 if mobile else 68
         cards.append(f'<rect x="{x}" y="{y}" width="576" height="182" rx="20" fill="{fill}" stroke="{border}"/>'
                      f'<rect x="{x+28}" y="{y+30}" width="4" height="22" rx="2" fill="{accent}"/>'
                      f'<text x="{x+46}" y="{y+49}" fill="#dedbe3" font-size="{label_size}" letter-spacing="1">{name}</text>'
@@ -130,8 +130,8 @@ def render(now):
         '<title>Current consecutive commit days, public and private, Asia/Shanghai</title>'
         '<rect x="12" y="8" width="576" height="178" rx="20" fill="#21181b" stroke="#695036"/>'
         '<g font-family="Arial,Helvetica,sans-serif">'
-        '<text x="40" y="47" fill="#dedbe3" font-size="24" letter-spacing="1">CURRENT COMMIT STREAK</text>'
-        f'<text x="40" y="126" fill="#ffcc66" font-size="70" font-weight="700">{streak}</text>'
+        '<text x="40" y="47" fill="#dedbe3" font-size="32" letter-spacing="1">CURRENT COMMIT STREAK</text>'
+        f'<text x="40" y="126" fill="#ffcc66" font-size="80" font-weight="700">{streak}</text>'
         '<text x="552" y="122" text-anchor="end" fill="#ffcc66" font-size="22">DAYS</text>'
         '<text x="40" y="162" fill="#c8c5cd" font-size="21">Public + private · Asia/Shanghai</text>'
         '</g></svg>\n'
