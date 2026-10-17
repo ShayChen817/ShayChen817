@@ -27,6 +27,31 @@ def calendar_response(total, restricted):
 
 
 class ContributionTests(unittest.TestCase):
+    def test_commit_streak_uses_local_days_and_yesterday_grace(self):
+        now = datetime(2026, 10, 18, 12, tzinfo=timezone.utc)
+        cases = [
+            (["2026-10-17T18:00:00Z", "2026-10-17T17:00:00Z", "2026-10-16T18:00:00Z"], 2),
+            (["2026-10-17T05:00:00Z", "2026-10-16T05:00:00Z"], 2),
+            (["2026-10-15T05:00:00Z"], 0),
+            ([], 0),
+        ]
+        for dates, expected in cases:
+            with self.subTest(dates=dates), patch.object(activity.subprocess, "run", return_value=SimpleNamespace(
+                stdout=json.dumps({"dates": dates, "total_count": len(dates), "incomplete_results": False})
+            )):
+                self.assertEqual(activity.current_commit_streak(now), expected)
+
+    def test_commit_streak_fetches_another_page_when_boundary_is_unknown(self):
+        pages = [
+            {"dates": ["2026-10-18T01:00:00Z"] * 100, "total_count": 101},
+            {"dates": ["2026-10-17T01:00:00Z"], "total_count": 101},
+        ]
+        with patch.object(activity.subprocess, "run", side_effect=[
+            SimpleNamespace(stdout=json.dumps(page)) for page in pages
+        ]) as run:
+            self.assertEqual(activity.current_commit_streak(datetime(2026, 10, 18, 12, tzinfo=timezone.utc)), 2)
+            self.assertEqual(run.call_count, 2)
+
     def test_refresh_updates_both_responsive_images_with_identical_counts(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -34,13 +59,13 @@ class ContributionTests(unittest.TestCase):
             readme = root / "README.md"
             readme.write_text('<picture><source media="(max-width: 600px)" '
                               'srcset="assets/activity-mobile.svg" />'
-                              '<img src="assets/activity.svg" /></picture>'
+                              '<img src="assets/activity.svg" /></picture><img src="assets/streak.svg" />'
                               '<!-- ACTIVITY:START --><!-- ACTIVITY:END -->', encoding="utf-8")
             old_paths = []
             for total in (953, 954):
                 with patch.object(activity, "ROOT", root), patch.object(
                     activity, "contribution_total", return_value=total
-                ), patch.object(activity, "search_count", side_effect=[1, 680, 115, 111]):
+                ), patch.object(activity, "current_commit_streak", return_value=7), patch.object(activity, "search_count", side_effect=[1, 680, 115, 111]):
                     activity.render(datetime(2026, 10, 18, tzinfo=timezone.utc))
                 paths = [root / path for path in re.findall(
                     r'(?:src|srcset)="([^"]+)"', readme.read_text(encoding="utf-8"))]
@@ -51,7 +76,7 @@ class ContributionTests(unittest.TestCase):
                     self.assertEqual(numbers, [str(total), "680", "115", "111"])
                 for old_path in old_paths:
                     self.assertFalse(old_path.exists())
-                old_paths = paths
+                old_paths = paths[:2]
 
     def test_history_has_disjoint_years_and_no_private_double_count(self):
         responses = [

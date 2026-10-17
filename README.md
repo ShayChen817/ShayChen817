@@ -24,12 +24,18 @@ Contributions follow GitHub’s calendar rules, including eligible code reviews 
 
 Only aggregate counts visible to the authorized account are published.
 
+The commit streak counts consecutive author-date days in Asia/Shanghai. If there is no commit today yet, a streak ending yesterday stays active. PRs and reviews do not extend it.
+
 </details>
 <!-- ACTIVITY:END -->
 
 <br />
 
 <h2 align="center">Keep the streak moving</h2>
+
+<p align="center">
+  <img src="assets/streak-fadf10bf0b08.svg" width="600" alt="Current consecutive commit days across public and private repositories" />
+</p>
 
 <p align="center">
   <picture>

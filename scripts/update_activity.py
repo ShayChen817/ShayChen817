@@ -1,5 +1,5 @@
 """Publish aggregate counts only; never persist repository or activity details."""
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import json
 import hashlib
@@ -8,6 +8,37 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 USER = "ShayChen817"
+PROFILE_TIMEZONE = timezone(timedelta(hours=8))
+
+
+def current_commit_streak(now):
+    """Count consecutive commit days in Shanghai; today may still be in progress."""
+    today = now.astimezone(PROFILE_TIMEZONE).date()
+    days = set()
+    for page in range(1, 11):
+        result = subprocess.run(
+            ["gh", "api", "--method", "GET", "search/commits", "-f", f"q=author:{USER}",
+             "-f", "sort=author-date", "-f", "order=desc", "-f", "per_page=100",
+             "-f", f"page={page}", "--jq",
+             "{total_count, incomplete_results, dates: [.items[].commit.author.date]}"],
+            check=True, capture_output=True, encoding="utf-8",
+        )
+        data = json.loads(result.stdout)
+        if data.get("incomplete_results"):
+            raise RuntimeError("Incomplete commit history; retaining previous streak")
+        for value in data["dates"]:
+            day = datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(PROFILE_TIMEZONE).date()
+            if day <= today:
+                days.add(day)
+        cursor = today if today in days else today - timedelta(days=1)
+        streak = 0
+        while cursor in days:
+            streak += 1
+            cursor -= timedelta(days=1)
+        # A fetched day older than the gap proves all newer days were searched.
+        if (days and min(days) < cursor) or page * 100 >= data["total_count"]:
+            return streak
+    raise RuntimeError("Streak exceeds searchable history; refusing to publish a truncated count")
 
 
 def contribution_total(now):
@@ -93,6 +124,18 @@ def render(now):
     commits = search_count("commits", f"author:{USER}")
     prs = search_count("issues", f"author:{USER} is:pr")
     merged = search_count("issues", f"author:{USER} is:pr is:merged")
+    streak = current_commit_streak(now)
+    streak_svg = (
+        '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="194" viewBox="0 0 600 194" role="img">'
+        '<title>Current consecutive commit days, public and private, Asia/Shanghai</title>'
+        '<rect x="12" y="8" width="576" height="178" rx="20" fill="#21181b" stroke="#695036"/>'
+        '<g font-family="Arial,Helvetica,sans-serif">'
+        '<text x="40" y="47" fill="#dedbe3" font-size="24" letter-spacing="1">CURRENT COMMIT STREAK</text>'
+        f'<text x="40" y="126" fill="#ffcc66" font-size="70" font-weight="700">{streak}</text>'
+        '<text x="552" y="122" text-anchor="end" fill="#ffcc66" font-size="22">DAYS</text>'
+        '<text x="40" y="162" fill="#c8c5cd" font-size="21">Public + private · Asia/Shanghai</text>'
+        '</g></svg>\n'
+    )
     metrics = [
         ("CONTRIBUTIONS", contributions, "#ffcc66"),
         ("COMMITS", commits, "#ffffff"),
@@ -104,7 +147,8 @@ def render(now):
     rows = [f'<p align="center"><sub>Public + private &nbsp; · &nbsp; All time &nbsp; · &nbsp; Updated {now:%Y-%m-%d} UTC</sub></p>',
             '', '<details>', '<summary>About these numbers</summary>', '',
             'Contributions follow GitHub’s calendar rules, including eligible code reviews and private activity. Commit and PR counts use GitHub search; the cards are not additive.', '',
-            'Only aggregate counts visible to the authorized account are published.', '', '</details>']
+            'Only aggregate counts visible to the authorized account are published.', '',
+            'The commit streak counts consecutive author-date days in Asia/Shanghai. If there is no commit today yet, a streak ending yesterday stays active. PRs and reviews do not extend it.', '', '</details>']
     readme_path = ROOT / "README.md"
     readme = readme_path.read_text(encoding="utf-8")
     pattern = r"<!-- ACTIVITY:START -->.*?<!-- ACTIVITY:END -->"
@@ -125,11 +169,23 @@ def render(now):
     )
     if source_count != 1:
         raise RuntimeError("Expected exactly one mobile activity source")
+    streak_version = hashlib.sha256(streak_svg.encode("utf-8")).hexdigest()[:12]
+    updated, streak_count = re.subn(
+        r'src="assets/streak(?:-[a-f0-9]{12})?\.svg"',
+        f'src="assets/streak-{streak_version}.svg"', updated,
+    )
+    if streak_count != 1:
+        raise RuntimeError("Expected exactly one streak image")
     (ROOT / "assets/activity.svg").write_text(svg, encoding="utf-8")
     image_path = ROOT / "assets" / f"activity-{version}.svg"
     image_path.write_text(svg, encoding="utf-8")
     mobile_path = ROOT / "assets" / f"activity-mobile-{version}.svg"
     mobile_path.write_text(mobile_svg, encoding="utf-8")
+    streak_path = ROOT / "assets" / f"streak-{streak_version}.svg"
+    streak_path.write_text(streak_svg, encoding="utf-8")
+    for old_streak in (ROOT / "assets").glob("streak-*.svg"):
+        if re.fullmatch(r"streak-[a-f0-9]{12}\.svg", old_streak.name) and old_streak != streak_path:
+            old_streak.unlink()
     for old_image in (ROOT / "assets").glob("activity-*.svg"):
         if re.fullmatch(r"activity-(?:mobile-)?[a-f0-9]{12}\.svg", old_image.name) and old_image not in (image_path, mobile_path):
             old_image.unlink()
