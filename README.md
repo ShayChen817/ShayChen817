@@ -4,23 +4,29 @@
 
 <br />
 
-## On the scoresheet
-
-<p>Every commit counts. Every merge moves things forward.</p>
+<h2 align="center">On the scoresheet</h2>
+<p align="center">Every commit counts. Every merge moves things forward.</p>
 
 <p align="center">
-  <img src="assets/activity-b68c02f4b4b9.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
+  <img src="assets/activity-247a953e10cd.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
 </p>
 
 <!-- ACTIVITY:START -->
-<sub>Public + private · all time · updated 2026-10-17 UTC · counts only.</sub>
-<br /><sub>Contributions follow GitHub’s calendar rules, including eligible code reviews and private activity. Commit and PR counts use GitHub search; the cards are not additive.</sub>
-<br /><sub>Only aggregate counts visible to the authorized account are published.</sub>
+<p align="center"><sub>Public + private &nbsp; · &nbsp; All time &nbsp; · &nbsp; Updated 2026-10-17 UTC</sub></p>
+
+<details>
+<summary>About these numbers</summary>
+
+Contributions follow GitHub’s calendar rules, including eligible code reviews and private activity. Commit and PR counts use GitHub search; the cards are not additive.
+
+Only aggregate counts visible to the authorized account are published.
+
+</details>
 <!-- ACTIVITY:END -->
 
 <br />
 
-## Keep the streak moving
+<h2 align="center">Keep the streak moving</h2>
 
 <p align="center">
   <picture>
@@ -34,8 +40,7 @@
 
 <div align="center">
   <h2>The celebration stays.</h2>
-  <img src="https://media.tenor.com/YP4KrHlwtsYAAAAd/cristiano-ronaldo-manchester-united-cristiano-ronaldo-celebration.gif" width="420" alt="Young Cristiano Ronaldo, Manchester United celebration" />
-  <p><strong>SIUUUUU!</strong></p>
-  <sub>One more commit. One more goal.</sub>
+  <img src="https://media.tenor.com/YP4KrHlwtsYAAAAd/cristiano-ronaldo-manchester-united-cristiano-ronaldo-celebration.gif" width="360" alt="Young Cristiano Ronaldo, Manchester United celebration" />
+  <p><strong>SIUUUUU!</strong><br /><sub>One more commit. One more goal.</sub></p>
   <br /><br />
 </div>

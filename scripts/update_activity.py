@@ -78,20 +78,24 @@ def render(now):
     for i, (name, count, accent) in enumerate([
         ("CONTRIBUTIONS", contributions, "#ffcc66"),
         ("COMMITS", commits, "#ffffff"),
-        ("PRS OPENED", prs, "#ff5270"),
-        ("PRS MERGED", merged, "#c4b5fd"),
+        ("PULL REQUESTS OPENED", prs, "#ff5270"),
+        ("PULL REQUESTS MERGED", merged, "#ff8a9d"),
     ]):
-        x = 12 + i * 298
-        cards.append(f'<rect x="{x}" y="12" width="282" height="166" rx="16" fill="#15151b" stroke="#303039"/>'
-                     f'<rect x="{x+24}" y="36" width="26" height="3" rx="1.5" fill="{accent}"/>'
-                     f'<text x="{x+24}" y="104" fill="{accent}" font-size="54" font-weight="700">{count:,}</text>'
-                     f'<text x="{x+24}" y="143" fill="#bcbcc9" font-size="13" letter-spacing="1.5">{name}</text>')
-    svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="195" viewBox="0 0 1200 195" role="img">'
+        x, y = 12 + (i % 2) * 600, 12 + (i // 2) * 198
+        fill = "#21181b" if i == 0 else "#15151b"
+        border = "#695036" if i == 0 else "#303039"
+        cards.append(f'<rect x="{x}" y="{y}" width="576" height="182" rx="20" fill="{fill}" stroke="{border}"/>'
+                     f'<rect x="{x+28}" y="{y+30}" width="4" height="22" rx="2" fill="{accent}"/>'
+                     f'<text x="{x+46}" y="{y+47}" fill="#c8c5cd" font-size="17" letter-spacing="1.5">{name}</text>'
+                     f'<text x="{x+28}" y="{y+133}" fill="{accent}" font-size="68" font-weight="700">{count:,}</text>'
+                     f'<path d="M{x+28} {y+157}h520" stroke="{border}"/>')
+    svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="404" viewBox="0 0 1200 404" role="img">'
            '<title>Public and private GitHub activity across all time</title>'
            '<g font-family="Arial,Helvetica,sans-serif">' + ''.join(cards) + '</g></svg>\n')
-    rows = [f'<sub>Public + private · all time · updated {now:%Y-%m-%d} UTC · counts only.</sub>',
-            '<br /><sub>Contributions follow GitHub’s calendar rules, including eligible code reviews and private activity. Commit and PR counts use GitHub search; the cards are not additive.</sub>',
-            '<br /><sub>Only aggregate counts visible to the authorized account are published.</sub>']
+    rows = [f'<p align="center"><sub>Public + private &nbsp; · &nbsp; All time &nbsp; · &nbsp; Updated {now:%Y-%m-%d} UTC</sub></p>',
+            '', '<details>', '<summary>About these numbers</summary>', '',
+            'Contributions follow GitHub’s calendar rules, including eligible code reviews and private activity. Commit and PR counts use GitHub search; the cards are not additive.', '',
+            'Only aggregate counts visible to the authorized account are published.', '', '</details>']
     readme_path = ROOT / "README.md"
     readme = readme_path.read_text(encoding="utf-8")
     pattern = r"<!-- ACTIVITY:START -->.*?<!-- ACTIVITY:END -->"
