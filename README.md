@@ -13,8 +13,8 @@
 
 <p align="center">
   <picture>
-    <source media="(max-width: 600px)" srcset="assets/activity-mobile-72e9c5f050bf.svg" />
-    <img src="assets/activity-72e9c5f050bf.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
+    <source media="(max-width: 600px)" srcset="assets/activity-mobile-ad2c78a9bf0c.svg" />
+    <img src="assets/activity-ad2c78a9bf0c.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
   </picture>
 </p>
 
