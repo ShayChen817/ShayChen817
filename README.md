@@ -2,6 +2,10 @@
   <img src="assets/header.svg" width="100%" alt="Shay Chen — Electronics Engineering / KNOQS / Leuven — SIUUUUU!" />
 </div>
 
+<p align="center">
+  <a href="https://shaychen817.github.io/ShayChen/en/"><strong>Personal website &rarr;</strong></a>
+</p>
+
 <br />
 
 <h2 align="center">On the scoresheet</h2>
