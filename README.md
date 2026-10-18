@@ -9,13 +9,13 @@
 
 <p align="center">
   <picture>
-    <source media="(max-width: 600px)" srcset="assets/activity-mobile-c67230b4e50f.svg" />
-    <img src="assets/activity-c67230b4e50f.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
+    <source media="(max-width: 600px)" srcset="assets/activity-mobile-cbc117033465.svg" />
+    <img src="assets/activity-cbc117033465.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
   </picture>
 </p>
 
 <!-- ACTIVITY:START -->
-<p align="center"><sub>Public + private &nbsp; · &nbsp; All time &nbsp; · &nbsp; Updated 2026-10-17 UTC</sub></p>
+<p align="center"><sub>Public + private &nbsp; · &nbsp; All time &nbsp; · &nbsp; Updated 2026-10-18 UTC</sub></p>
 
 <details>
 <summary>About these numbers</summary>
