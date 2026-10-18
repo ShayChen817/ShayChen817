@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="88" viewBox="0 0 440 88" role="img" aria-labelledby="title">
+  <title id="title">Visit Shay Chen's personal website</title>
+  <rect x="1" y="1" width="438" height="86" rx="8" fill="#0d1117" stroke="#665536" stroke-width="2"/>
+  <path d="M2 24V64" stroke="#eac16a" stroke-width="4"/>
+  <text x="28" y="54" fill="#eac16a" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="600">Personal website</text>
+  <path d="M378 53L398 33M381 33H398V50" fill="none" stroke="#eac16a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
