@@ -8,15 +8,13 @@
   </a>
 </p>
 
-<br />
-
-<h2 align="center">On the scoresheet</h2>
-<p align="center">Every commit counts. Every merge moves things forward.</p>
+<p align="center"><strong>On the scoresheet</strong><br />
+<sub>Every commit counts. Every merge moves things forward.</sub></p>
 
 <p align="center">
   <picture>
-    <source media="(max-width: 600px)" srcset="assets/activity-mobile-cbc117033465.svg" />
-    <img src="assets/activity-cbc117033465.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
+    <source media="(max-width: 600px)" srcset="assets/activity-mobile-72e9c5f050bf.svg" />
+    <img src="assets/activity-72e9c5f050bf.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
   </picture>
 </p>
 

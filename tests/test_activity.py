@@ -44,7 +44,7 @@ class ContributionTests(unittest.TestCase):
                     activity.render(datetime(2026, 10, 18, tzinfo=timezone.utc))
                 paths = [root / path for path in re.findall(
                     r'(?:src|srcset)="([^"]+)"', readme.read_text(encoding="utf-8"))]
-                for path, viewbox in zip(paths, ("0 0 600 480", "0 0 1200 320")):
+                for path, viewbox in zip(paths, ("0 0 600 420", "0 0 1200 210")):
                     svg = ET.parse(path).getroot()
                     self.assertEqual(svg.attrib["viewBox"], viewbox)
                     numbers = [node.text for node in svg.iter() if node.attrib.get("font-weight") == "700"]

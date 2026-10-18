@@ -65,23 +65,20 @@ def search_count(kind, query):
 
 
 def activity_svg(metrics, mobile=False):
-    width, height = (600, 480) if mobile else (1200, 320)
-    parts = [f'<rect x="1" y="1" width="{width-2}" height="{height-2}" rx="6" fill="#0d1117" stroke="#30363d"/>']
-    if mobile:
-        parts.extend(f'<path d="M24 {y}H576" stroke="#30363d"/>' for y in (120, 240, 360))
-    else:
-        parts.append('<path d="M600 24V296 M24 160H1176" stroke="#30363d"/>')
+    width, height = (600, 420) if mobile else (1200, 210)
+    parts = []
     colors = ("#eac16a", "#79b8ff", "#7bc99a", "#bda0ef")
+    fills = ("#191810", "#111a24", "#111d18", "#1b1624")
+    borders = ("#3d3523", "#24364b", "#263e31", "#3b2d4e")
     for i, (name, count) in enumerate(metrics):
-        accent = colors[i]
-        if mobile:
-            y = i * 120
-            parts.append(f'<text x="28" y="{y+71}" fill="#a6adb6" font-size="32">{name}</text>')
-            parts.append(f'<text x="572" y="{y+77}" text-anchor="end" fill="{accent}" font-size="52" font-weight="700">{count:,}</text>')
-        else:
-            x, y = (i % 2) * 600, (i // 2) * 160
-            parts.append(f'<text x="{x+36}" y="{y+49}" fill="#a6adb6" font-size="24">{name}</text>')
-            parts.append(f'<text x="{x+36}" y="{y+119}" fill="{accent}" font-size="56" font-weight="700">{count:,}</text>')
+        x = (i % 2) * 308 if mobile else i * 304
+        y = (i // 2) * 218 if mobile else 0
+        card_width = 292 if mobile else 288
+        label_size = 34 if mobile else 26
+        number_size = 70 if mobile else 64
+        parts.append(f'<rect x="{x+1}" y="{y+1}" width="{card_width-2}" height="200" rx="10" fill="{fills[i]}" stroke="{borders[i]}" stroke-width="2"/>')
+        parts.append(f'<text x="{x+22}" y="{y+99}" fill="{colors[i]}" font-size="{number_size}" font-weight="700" letter-spacing="-2">{count:,}</text>')
+        parts.append(f'<text x="{x+22}" y="{y+158}" fill="#c9cdd3" font-size="{label_size}">{name}</text>')
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img">'
             '<title>Public and private GitHub activity across all time</title>'
             '<g font-family="Arial,Helvetica,sans-serif">' + ''.join(parts) + '</g></svg>\n')
