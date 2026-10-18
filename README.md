@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://shaychen817.github.io/ShayChen/en/">
-    <img src="assets/website-link.svg" width="440" alt="Visit my personal website — Shay Chen" />
+    <img src="assets/website-link-minimal.svg" width="320" alt="Visit my personal website — Shay Chen" />
   </a>
 </p>
 
