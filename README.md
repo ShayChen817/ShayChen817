@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/header.svg" width="100%" alt="Shay Chen — Electronics Engineering / KNOQS / Leuven — SIUUUUU!" />
+  <img src="assets/header.svg" width="100%" alt="Shay Chen — Electronics Engineering / Leuven — SIUUUUU!" />
 </div>
 
 <p align="center">
@@ -8,28 +8,6 @@
   </a>
 </p>
 
-<p align="center"><strong>On the scoresheet</strong><br />
-<sub>Every commit counts. Every merge moves things forward.</sub></p>
-
-<p align="center">
-  <picture>
-    <source media="(max-width: 600px)" srcset="assets/activity-mobile-d99031fe872c.svg" />
-    <img src="assets/activity-d99031fe872c.svg" width="100%" alt="All-time public and private contributions, commits, pull requests opened, and pull requests merged" />
-  </picture>
-</p>
-
-<!-- ACTIVITY:START -->
-<p align="center"><sub>Public + private &nbsp; · &nbsp; All time &nbsp; · &nbsp; Updated 2026-11-11 UTC</sub></p>
-
-<details>
-<summary>About these numbers</summary>
-
-Contributions follow GitHub’s calendar rules, including eligible code reviews and private activity. Commit and PR counts use GitHub search; the cards are not additive.
-
-Only aggregate counts visible to the authorized account are published.
-
-</details>
-<!-- ACTIVITY:END -->
 
 <br />
 
